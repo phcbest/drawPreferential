@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 /**
  * 版权：没有版权 看得上就用
@@ -19,10 +22,45 @@ import androidx.fragment.app.Fragment;
  */
 public abstract class BaseFragment extends Fragment {
 
+    private Unbinder mBind;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return loadRootView(inflater,container,savedInstanceState);
+        View rootView = loadRootView(inflater, container, savedInstanceState);
+        //这里有两段逻辑是可有可无的，主要的对于页面进行初始化
+        mBind = ButterKnife.bind(this, rootView);
+        initView(rootView);
+        initPresenter();
+        loadData();
+        return rootView;
+    }
+
+    protected void initView(View rootView) {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mBind != null) {
+            mBind.unbind();
+        }
+
+        release();
+    }
+
+    protected void release() {
+        //释放资源
+    }
+
+    protected void initPresenter(){
+        //创建presenter
+    }
+
+    protected void loadData() {
+        //加载数据
+
     }
 
     protected  View loadRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
