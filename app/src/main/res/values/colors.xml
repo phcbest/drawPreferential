@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#F5A623</color>
     <color name="colorAccent">#F5A623</color>
     <color name="colorGray">#7b7b7b</color>
+
+
+    <color name="colorTabSelected">#ffffff</color>
+    <color name="colorTabNormal">#aaffffff</color>
 </resources>

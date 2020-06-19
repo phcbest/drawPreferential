@@ -1,6 +1,8 @@
 package com.phc.neckrreferential.ui.fragment;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -33,48 +35,88 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     private HomePresenterImpl mHomePresenter;
     private HomePagerAdapter mHomePagerAdapter;
 
+
+    /**
+     * 这个是必须重写的抽象方法，主要是给baseFragment提供加载成功页面布局,成功页面的布局在base_home_fragment_layout框架内
+     * @return
+     */
     @Override
     protected int getRootViewResId() {
         return R.layout.fragment_home;
     }
 
+    /**
+     * 外部框架替换
+     * @param inflater
+     * @param container
+     * @return
+     */
     @Override
-    protected void initPresenter() {
-        //重写继承BaseFragment需要的方法initPresenter
-        //创建主页管理者层presenter
-        mHomePresenter = new HomePresenterImpl();
-        //this是调用了onCategoriesLoaded
-        mHomePresenter.registerCallback(this);
+    protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
+        return inflater.inflate(R.layout.base_home_fragment_layout,container,false);
     }
 
     @Override
     protected void initView(View rootView) {
+        //给tabLayout和ViewPager绑定
         mTabLayout.setupWithViewPager(mHomePager);
-        //给viewPager设置适配器
+        //给viewPager设置适配器，获取子fragment管理器
         mHomePagerAdapter = new HomePagerAdapter(getChildFragmentManager());
         mHomePager.setAdapter(mHomePagerAdapter);
     }
 
     @Override
-    protected void loadData() {
-        //加载数据
-        mHomePresenter.getCategories();
+    protected void initPresenter() {
+        //重写继承BaseFragment需要的方法initPresenter
+        //实例化HomePresenterImpl
+        mHomePresenter = new HomePresenterImpl();
+        //将重写的IHoneCallback接口传递过去
+        mHomePresenter.registerCallback(this);
     }
 
     @Override
+    protected void loadData() {
+        //加载类别数据
+        mHomePresenter.getCategories();
+    }
+
+    /**
+     *数据返回成功
+     * @param categories 使用这个得到返回json
+     */
+    @Override
     public void onCategoriesLoaded(Categories categories) {
-        //加载的数据从这里回来
+        setUpState(State.SUCCESS);
+        //加载的数据从这里回来，如果适配器不为null，就调用适配器内部的setCategoryList方法，将有数据的Categories对象传递进去
         if (mHomePagerAdapter!=null) {
             mHomePagerAdapter.setCategoryList(categories);
         }
     }
 
+    @Override
+    public void onNetWorkError() {
+        setUpState(State.ERROR);
+    }
 
+    @Override
+    public void onLoading() {
+        setUpState(State.LOADING);
+    }
+
+    @Override
+    public void onEmpty() {
+        setUpState(State.EMPTY);
+    }
+
+    /**
+     * 释放资源
+     */
     @Override
     protected void release() {
         //该方法在生命周期onDestroyView中实现
-        //取消回调注册
+        //如果HomePresenterImpl为null
         if (mHomePresenter != null) {
+            //使用取消回调注册
             mHomePresenter.unregisterCallback(this);
         }
     }

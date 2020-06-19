@@ -13,4 +13,11 @@ public interface IHoneCallback {
      * @param categories 使用这个得到返回json
      */
     void onCategoriesLoaded(Categories categories);
+
+    void onNetWorkError();
+
+    void onLoading();
+
+    void onEmpty();
+
 }
