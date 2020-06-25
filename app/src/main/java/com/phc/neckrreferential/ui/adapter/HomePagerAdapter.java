@@ -53,8 +53,9 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        //实例化一个新的fragment返回
-        HomePagerFragment homePagerFragment = new HomePagerFragment();
+        Categories.DataBean dataBean = categoryList.get(position);
+        //实例化一个新的fragment返回,调用该实例还会将关键数据进行bundle
+        HomePagerFragment homePagerFragment = HomePagerFragment.newInstance(dataBean);
         return homePagerFragment;
     }
 

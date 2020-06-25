@@ -94,7 +94,7 @@ public class HomePresenterImpl implements IHomePresenter {
      * @param callback 返回请求
      */
     @Override
-    public void registerCallback(IHoneCallback callback) {
+    public void registerViewCallback(IHoneCallback callback) {
         this.mCallBack = callback;
 
     }
@@ -104,7 +104,7 @@ public class HomePresenterImpl implements IHomePresenter {
      */
 
     @Override
-    public void unregisterCallback(IHoneCallback callback) {
+    public void unregisterViewCallback(IHoneCallback callback) {
         //将IHoneCallback清空
         mCallBack = null;
     }

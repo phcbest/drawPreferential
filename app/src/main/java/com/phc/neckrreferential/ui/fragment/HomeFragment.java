@@ -71,13 +71,23 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
         //实例化HomePresenterImpl
         mHomePresenter = new HomePresenterImpl();
         //将重写的IHoneCallback接口传递过去
-        mHomePresenter.registerCallback(this);
+        mHomePresenter.registerViewCallback(this);
     }
 
     @Override
     protected void loadData() {
         //加载类别数据
         mHomePresenter.getCategories();
+    }
+
+    /**
+     * 重新加载分类
+     */
+    @Override
+    protected void onRetryClick() {
+        if (mHomePresenter != null) {
+            mHomePresenter.getCategories();
+        }
     }
 
     /**
@@ -117,7 +127,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
         //如果HomePresenterImpl为null
         if (mHomePresenter != null) {
             //使用取消回调注册
-            mHomePresenter.unregisterCallback(this);
+            mHomePresenter.unregisterViewCallback(this);
         }
     }
 }

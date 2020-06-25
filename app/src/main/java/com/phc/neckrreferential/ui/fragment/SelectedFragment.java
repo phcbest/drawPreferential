@@ -1,5 +1,7 @@
 package com.phc.neckrreferential.ui.fragment;
 
+import android.view.View;
+
 import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.base.BaseFragment;
 
@@ -19,5 +21,9 @@ public class SelectedFragment extends BaseFragment {
         return R.layout.fragment_selected;
     }
 
+    @Override
+    protected void initView(View rootView) {
+        setUpState(State.SUCCESS);
+    }
 
 }

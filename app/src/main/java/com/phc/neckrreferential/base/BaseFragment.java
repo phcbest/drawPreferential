@@ -11,8 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.phc.neckrreferential.R;
+import com.phc.neckrreferential.utils.LogUtils;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -44,6 +46,19 @@ public abstract class BaseFragment extends Fragment {
 
     private Unbinder mBind;
     private FrameLayout mBaseContainer;
+
+    @OnClick(R.id.network_error_tips)
+    public void retry(){
+        //点了重新加载
+        LogUtils.d(this,"on reTry...........");
+        onRetryClick();
+    }
+
+    /**
+     * 如果子fragment需要知道网络错误以后的点击，覆盖该方法
+     */
+    protected void onRetryClick() {
+    }
 
     @Nullable
     @Override
@@ -152,10 +167,6 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(resId,container,false);
     }
 
-    protected void initView(View rootView) {
-
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -164,6 +175,10 @@ public abstract class BaseFragment extends Fragment {
         }
 
         release();
+    }
+
+    protected void initView(View rootView) {
+
     }
 
     protected void release() {
