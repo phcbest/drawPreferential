@@ -27,6 +27,7 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends Fragment {
 
+    int main = 1;
     private State currentState = State.NONE;
     private View mSuccessView;
     private View mLoadingView;

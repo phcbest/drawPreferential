@@ -8,7 +8,7 @@ package com.phc.neckrreferential.base;
  * 描述：
  */
 public interface IBaseCallBack {
-    void onNetWorkError();
+    void onError();
 
     void onLoading();
 

@@ -31,7 +31,7 @@ public class Categories {
         this.success = success;
     }
 
-    public int getCode() {
+    public long getCode() {
         return code;
     }
 

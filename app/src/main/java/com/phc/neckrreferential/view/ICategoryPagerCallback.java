@@ -1,5 +1,6 @@
 package com.phc.neckrreferential.view;
 
+import com.phc.neckrreferential.base.IBaseCallBack;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
 
 import java.util.List;
@@ -11,39 +12,24 @@ import java.util.List;
  * 创建日期：2020/6/25 17
  * 描述：
  */
-public interface ICategoryPagerCallback {
+public interface ICategoryPagerCallback extends IBaseCallBack {
     /**
      * 数据加载回来
      * @param contents
      */
-    void onContentLoaded(List<HomePagerContent.DataBean > contents);
+    void onContentLoaded(List<HomePagerContent.DataBean> contents );
 
-    /**
-     * 加载中
-     * @param categoryId
-     */
-    void onLoading(int categoryId);
-    /**
-     * 网络错误
-     * @param categoryId
-     */
-    void onError(int categoryId);
-    /**
-     * 数据为null
-     * @param categoryId
-     */
-    void onEmpty(int categoryId);
+    int getCategoryId();
+
 
     /**
      * 加载更多网络错误
-     * @param categoryId
      */
-    void onLoaderMoreError(int categoryId);
+    void onLoaderMoreError();
     /**
      * 没有更多内容
-     * @param categoryId
      */
-    void onLoaderMoreEmpty(int categoryId);
+    void onLoaderMoreEmpty();
 
     /**
      * 加到了更多内容

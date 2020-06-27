@@ -104,7 +104,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     }
 
     @Override
-    public void onNetWorkError() {
+    public void onError() {
         setUpState(State.ERROR);
     }
 

@@ -24,22 +24,22 @@ public class LogUtils {
 
     public static void d (Object object,String log){
         if (currentLev >=  DEBU_GLEV){
-            Log.d(object.getClass().getName(), log);
+            Log.d(object.getClass().getName(), "(DEBUG)\n"+log);
         }
     }
     public static void i (Object object,String log){
         if (currentLev >=  INFO_LEV){
-            Log.i(object.getClass().getName(), log);
+            Log.i(object.getClass().getName(), "(INFO)\n"+log);
         }
     }
     public static void w (Object object,String log){
         if (currentLev >=  WARNING_LEV){
-            Log.w(object.getClass().getName(), log);
+            Log.w(object.getClass().getName(), "(WARNING)\n"+log);
         }
     }
     public static void e (Object object,String log){
         if (currentLev >=  ERROR_LEV){
-            Log.e(object.getClass().getName(), log);
+            Log.e(object.getClass().getName(), "(ERROR)\n"+log);
         }
     }
 }

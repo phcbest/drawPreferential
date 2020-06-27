@@ -1,9 +1,11 @@
 package com.phc.neckrreferential.modle;
 
 import com.phc.neckrreferential.modle.domain.Categories;
+import com.phc.neckrreferential.modle.domain.HomePagerContent;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Url;
 
 /**
  * 版权：没有版权 看得上就用
@@ -16,6 +18,9 @@ public interface Api {
 
     @GET("discovery/categories")
     Call<Categories> getCategories();
+
+    @GET
+    Call<HomePagerContent> getHomePagerContent(@Url String url);
 
 
 }

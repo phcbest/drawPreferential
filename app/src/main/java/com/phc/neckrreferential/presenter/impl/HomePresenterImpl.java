@@ -68,7 +68,7 @@ public class HomePresenterImpl implements IHomePresenter {
                     LogUtils.d(HomePresenterImpl.this, "请求失败");
                     if (mCallBack!=null) {
                         //切换请求失败页面
-                        mCallBack.onNetWorkError();
+                        mCallBack.onError();
                     }
                 }
             }
@@ -81,10 +81,9 @@ public class HomePresenterImpl implements IHomePresenter {
             @Override
             public void onFailure(Call<Categories> call, Throwable t) {
                 //加载失败的结果
-                // TODO:
                 LogUtils.e(HomePresenterImpl.this, "请求失败" + t);
                 if (mCallBack!=null) {
-                    mCallBack.onNetWorkError();
+                    mCallBack.onError();
                 }
             }
         });
