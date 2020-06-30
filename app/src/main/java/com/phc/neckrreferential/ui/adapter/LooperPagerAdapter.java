@@ -10,6 +10,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
 import com.phc.neckrreferential.utils.UrlUtils;
+import com.phc.neckrreferential.utils.logUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,16 @@ public class LooperPagerAdapter extends PagerAdapter {
 
     List<HomePagerContent.DataBean> mData = new ArrayList<>();
 
+    public int getDataSize(){
+        logUtils.d(this,"数据尺寸"+mData.size());
+        //因为第二次拿数据的时候
+        return mData.size();
+    }
+
+
     @Override
     public int getCount() {
-        return mData.size();
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -38,8 +46,10 @@ public class LooperPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        HomePagerContent.DataBean dataBean = mData.get(position);
-        String coverPath = UrlUtils.getCoverPath(dataBean.getPict_url());
+        int realPosition = position % mData.size();
+        HomePagerContent.DataBean dataBean = mData.get(realPosition);
+        //图片自适应大小
+        String coverPath = UrlUtils.getCoverPath(dataBean.getPict_url(),200);
         ImageView iv = new ImageView(container.getContext());
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams
                 (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

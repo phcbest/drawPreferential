@@ -2,6 +2,7 @@ package com.phc.neckrreferential.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
 import com.phc.neckrreferential.utils.UrlUtils;
+import com.phc.neckrreferential.utils.logUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,7 @@ import butterknife.ButterKnife;
 public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContentAdapter.InnerHolder> {
 
 
-    List<HomePagerContent.DataBean> data = new ArrayList<>();
+    List<HomePagerContent.DataBean> mData = new ArrayList<>();
 
 
     /**
@@ -42,30 +45,39 @@ public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContent
      * @param viewType
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_home_pager_content,parent,false);
+        logUtils.d(this,"onCreateViewHolder");
         return new InnerHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
-        HomePagerContent.DataBean dataBean = data.get(position);
+        HomePagerContent.DataBean dataBean = mData.get(position);
         //设置数据
         holder.setData(dataBean);
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return mData.size();
     }
 
     public void setData(List<HomePagerContent.DataBean> contents) {
-        data.clear();
-        data.addAll(contents);
+        mData.clear();
+        mData.addAll(contents);
         notifyDataSetChanged();
+    }
+
+    public void addData(List<HomePagerContent.DataBean> contents) {
+        int oldSize = contents.size();
+        mData.addAll(contents);
+        //通知适配器更新ui，范围更改
+        notifyItemRangeChanged(oldSize,contents.size());
     }
 
     public class InnerHolder extends RecyclerView.ViewHolder {
@@ -90,14 +102,21 @@ public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContent
         }
 
         public void setData(HomePagerContent.DataBean dataBean) {
+//            拿到位置的size
+            ViewGroup.LayoutParams layoutParams = cover.getLayoutParams();
+//            三元运算符
+            int coverSize = Math.max(layoutParams.width, layoutParams.height) /2;
+//          拿出必要参数
             String finalPrice = dataBean.getZk_final_price();
             long couponAmount = dataBean.getCoupon_amount();
             float resultPrise = Float.parseFloat(finalPrice )- couponAmount;
             Context context = itemView.getContext();
-//            LogUtils.d(this,"Url______________"+dataBean.getPict_url());
+//            logUtils.d(this,"Url______________"+dataBean.getPict_url());
             //设置数据
             title.setText(dataBean.getTitle());
-            Glide.with(context).load(UrlUtils.getCoverPath(dataBean.getPict_url())).into(cover);
+//            logUtils.d(this,"图片路径+++++"+UrlUtils.getCoverPath(dataBean.getPict_url(),coverSize));
+            Glide.with(context).load(UrlUtils.getCoverPath(dataBean.getPict_url(),coverSize))
+                    .into(cover);
             offPriseTv.setText(String.format
                     (context.getString(R.string.text_goods_off_prise),couponAmount));
             finalPriseTv.setText(String.format

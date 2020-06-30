@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.phc.neckrreferential.R;
-import com.phc.neckrreferential.utils.LogUtils;
+import com.phc.neckrreferential.utils.logUtils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,7 +51,7 @@ public abstract class BaseFragment extends Fragment {
     @OnClick(R.id.network_error_tips)
     public void retry(){
         //点了重新加载
-        LogUtils.d(this,"on reTry...........");
+        logUtils.d(this,"on reTry...........");
         onRetryClick();
     }
 
@@ -75,9 +75,14 @@ public abstract class BaseFragment extends Fragment {
         mBind = ButterKnife.bind(this, rootView);
         //这里有两段逻辑，主要的对于页面进行初始化
         initView(rootView);
+        //设置事件
+        initListener();
         initPresenter();
         loadData();
         return rootView;
+    }
+
+    protected void initListener() {
     }
 
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {

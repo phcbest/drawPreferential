@@ -9,7 +9,7 @@ import android.util.Log;
  * 创建日期：2020/6/9 22
  * 描述： log的可管控的工具类
  */
-public class LogUtils {
+public class logUtils {
     /**
      * 当前的log等级 可以在项目上线时候进行改动，不让低级log出现
      */

@@ -3,7 +3,7 @@ package com.phc.neckrreferential.presenter.impl;
 import com.phc.neckrreferential.modle.Api;
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.presenter.IHomePresenter;
-import com.phc.neckrreferential.utils.LogUtils;
+import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.utils.RetrofitManager;
 import com.phc.neckrreferential.view.IHoneCallback;
 
@@ -48,7 +48,7 @@ public class HomePresenterImpl implements IHomePresenter {
             public void onResponse(Call<Categories> call, Response<Categories> response) {
                 //请求结果
                 int code = response.code();
-                LogUtils.d(HomePresenterImpl.this, "" + code);
+                logUtils.d(HomePresenterImpl.this, "" + code);
                 if (code == HttpURLConnection.HTTP_OK) {
                     //请求成功，response对象的.body就是javaBean类
                     Categories categories = response.body();
@@ -65,7 +65,7 @@ public class HomePresenterImpl implements IHomePresenter {
                     }
                 } else {
                     //请求失败
-                    LogUtils.d(HomePresenterImpl.this, "请求失败");
+                    logUtils.d(HomePresenterImpl.this, "请求失败");
                     if (mCallBack!=null) {
                         //切换请求失败页面
                         mCallBack.onError();
@@ -81,7 +81,7 @@ public class HomePresenterImpl implements IHomePresenter {
             @Override
             public void onFailure(Call<Categories> call, Throwable t) {
                 //加载失败的结果
-                LogUtils.e(HomePresenterImpl.this, "请求失败" + t);
+                logUtils.e(HomePresenterImpl.this, "请求失败" + t);
                 if (mCallBack!=null) {
                     mCallBack.onError();
                 }

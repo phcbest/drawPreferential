@@ -16,7 +16,7 @@ import com.phc.neckrreferential.ui.fragment.HomeFragment;
 import com.phc.neckrreferential.ui.fragment.RedPacketFragment;
 import com.phc.neckrreferential.ui.fragment.SearchFragment;
 import com.phc.neckrreferential.ui.fragment.SelectedFragment;
-import com.phc.neckrreferential.utils.LogUtils;
+import com.phc.neckrreferential.utils.logUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,16 +73,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.home){
-                    LogUtils.d(this,"切换到了home");
+                    logUtils.d(this,"切换到了home");
                     switchFragment(mHomeFragment);
                 }else if (item.getItemId() == R.id.selected){
-                    LogUtils.e(this,"切换到了selected");
+                    logUtils.e(this,"切换到了selected");
                     switchFragment(mSelectedFragment);
                 }else if (item.getItemId() == R.id.red_packet){
-                    LogUtils.i(this,"切换到了red_packet");
+                    logUtils.i(this,"切换到了red_packet");
                     switchFragment(mRedPacketFragment);
                 }else if (item.getItemId() == R.id.search){
-                    LogUtils.w(this,"切换到了search");
+                    logUtils.w(this,"切换到了search");
                     switchFragment(mSearchFragment);
                 }
                 return true;

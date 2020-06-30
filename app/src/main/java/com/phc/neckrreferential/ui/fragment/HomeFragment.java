@@ -99,6 +99,8 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
         setUpState(State.SUCCESS);
         //加载的数据从这里回来，如果适配器不为null，就调用适配器内部的setCategoryList方法，将有数据的Categories对象传递进去
         if (mHomePagerAdapter!=null) {
+//            TODO:这里可以更改首页viewPage的load数量
+//            mHomePager.setOffscreenPageLimit(categories.getData().size());
             mHomePagerAdapter.setCategoryList(categories);
         }
     }

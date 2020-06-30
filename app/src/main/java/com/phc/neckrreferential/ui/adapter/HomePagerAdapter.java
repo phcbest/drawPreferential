@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.ui.fragment.HomePagerFragment;
-import com.phc.neckrreferential.utils.LogUtils;
+import com.phc.neckrreferential.utils.logUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
         List<Categories.DataBean> data = categories.getData();
         //将新建的对象添加到老对象中去
         this.categoryList.addAll(data);
-        LogUtils.d(this,"size"+categoryList.size());
+        logUtils.d(this,"size"+categoryList.size());
         //告诉观察者数据更新
         notifyDataSetChanged();
     }
