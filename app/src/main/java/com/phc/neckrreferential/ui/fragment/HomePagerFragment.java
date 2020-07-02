@@ -16,6 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.lcodecore.tkrefreshlayout.views.TbNestedScrollView;
 import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.Categories;
@@ -24,7 +25,7 @@ import com.phc.neckrreferential.presenter.ICategoryPagerPresenter;
 import com.phc.neckrreferential.presenter.impl.CategoryPagePresenterImpl;
 import com.phc.neckrreferential.ui.adapter.HomePageContentAdapter;
 import com.phc.neckrreferential.ui.adapter.LooperPagerAdapter;
-import com.phc.neckrreferential.ui.custom.TbNestedScrollView;
+import com.phc.neckrreferential.ui.custom.AutoLoopViewPager;
 import com.phc.neckrreferential.utils.Constants;
 import com.phc.neckrreferential.utils.SizeUtils;
 import com.phc.neckrreferential.utils.ToastUtils;
@@ -91,7 +92,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
     public RecyclerView mContentList;
 
     @BindView(R.id.looper_pager)
-    public ViewPager looperPager;
+    public AutoLoopViewPager looperPager;
 
     @BindView(R.id.home_pager_title)
     public TextView currentCategoryTitleTv;
@@ -137,7 +138,20 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         twinklingRefreshLayout.setEnableOverScroll(true);
         twinklingRefreshLayout.setEnableRefresh(false);
         twinklingRefreshLayout.setEnableLoadmore(true);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //开始ViewPager轮播
+        looperPager.startLoop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //结束viewPager轮播
+        looperPager.stopLoop();
     }
 
     @Override
@@ -146,6 +160,9 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         homePagerParent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                if (homeHeaderContainer == null) {
+                    return;
+                }
                 int headerHeight = homeHeaderContainer.getMeasuredHeight();
                 logUtils.d(this,"headerHeight"+headerHeight);
                 homePagerNestedView.setHeaderHeight(headerHeight);

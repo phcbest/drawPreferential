@@ -1,4 +1,4 @@
-package com.phc.neckrreferential.ui.custom;
+package com.lcodecore.tkrefreshlayout.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,8 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.NestedScrollView;
-
-import com.phc.neckrreferential.utils.logUtils;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 版权：没有版权 看得上就用
@@ -20,8 +19,12 @@ import com.phc.neckrreferential.utils.logUtils;
  */
 public class TbNestedScrollView extends NestedScrollView {
 
+    private static final String TAG = "TbNestedScrollView";
+
     private int mHeaderHeight = 0;
     private int originScroll = 0;
+    private RecyclerView mRecyclerView;
+
 
     public TbNestedScrollView(@NonNull Context context) {
         super(context);
@@ -38,10 +41,12 @@ public class TbNestedScrollView extends NestedScrollView {
     @Override
     public void onNestedPreScroll(@NonNull View target, int dx, int dy,
                                   @NonNull int[] consumed, @ViewCompat.NestedScrollType int type) {
-        logUtils.d(this,"dy========="+dy);
-        logUtils.d(this,"dx========="+dx);
-        if (originScroll < mHeaderHeight){
-            scrollBy(dx,dy);
+        if (target instanceof RecyclerView) {
+            this.mRecyclerView = (RecyclerView) target;
+        }
+
+        if (originScroll < mHeaderHeight) {
+            scrollBy(dx, dy);
             consumed[0] = dx;
             consumed[1] = dy;
         }
@@ -51,11 +56,23 @@ public class TbNestedScrollView extends NestedScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         this.originScroll = t;
-        logUtils.d(this,"vertical======="+t);
         super.onScrollChanged(l, t, oldl, oldt);
     }
 
     public void setHeaderHeight(int headerHeight){
         this.mHeaderHeight = headerHeight;
+    }
+
+    /**
+     * 判断是否滑到了底部
+     * @return
+     */
+    public boolean isInBottom() {
+        if (mRecyclerView != null) {
+            boolean isBottom = !mRecyclerView.canScrollVertically(1);
+//            Log.d(TAG, "isInBottom: ============="+isBottom);
+            return isBottom;
+        }
+        return false;
     }
 }

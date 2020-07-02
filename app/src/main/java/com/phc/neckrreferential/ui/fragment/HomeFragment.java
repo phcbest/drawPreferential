@@ -1,9 +1,12 @@
 package com.phc.neckrreferential.ui.fragment;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -12,6 +15,7 @@ import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.presenter.impl.HomePresenterImpl;
 import com.phc.neckrreferential.ui.adapter.HomePagerAdapter;
+import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.view.IHoneCallback;
 
 import butterknife.BindView;
@@ -54,6 +58,20 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     @Override
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.base_home_fragment_layout,container,false);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        logUtils.d(this,"homeFragment_onCreateView.................");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        logUtils.d(this,"homeFragment_onDestroyView.................");
     }
 
     @Override
@@ -100,7 +118,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
         //加载的数据从这里回来，如果适配器不为null，就调用适配器内部的setCategoryList方法，将有数据的Categories对象传递进去
         if (mHomePagerAdapter!=null) {
 //            TODO:这里可以更改首页viewPage的load数量
-//            mHomePager.setOffscreenPageLimit(categories.getData().size());
+//            mHomePager.setOffscreenPageLimit(0);
             mHomePagerAdapter.setCategoryList(categories);
         }
     }
