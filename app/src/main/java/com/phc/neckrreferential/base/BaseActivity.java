@@ -1,7 +1,6 @@
 package com.phc.neckrreferential.base;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,20 +20,20 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Unbinder mBind;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
+
         mBind = ButterKnife.bind(this);
         initView();
         initEvent();
     }
 
+
     protected abstract int getLayoutResId();
 
 
-    protected void initEvent() {
-
-    }
+    protected void initEvent() { }
 
     protected abstract void initView();
 

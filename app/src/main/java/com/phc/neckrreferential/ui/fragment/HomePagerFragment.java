@@ -1,5 +1,6 @@
 package com.phc.neckrreferential.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,11 +23,13 @@ import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
 import com.phc.neckrreferential.presenter.ICategoryPagerPresenter;
-import com.phc.neckrreferential.presenter.impl.CategoryPagePresenterImpl;
+import com.phc.neckrreferential.presenter.ITicketPresenter;
+import com.phc.neckrreferential.ui.activity.TicketActivity;
 import com.phc.neckrreferential.ui.adapter.HomePageContentAdapter;
 import com.phc.neckrreferential.ui.adapter.LooperPagerAdapter;
 import com.phc.neckrreferential.ui.custom.AutoLoopViewPager;
 import com.phc.neckrreferential.utils.Constants;
+import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.SizeUtils;
 import com.phc.neckrreferential.utils.ToastUtils;
 import com.phc.neckrreferential.utils.logUtils;
@@ -43,7 +46,7 @@ import butterknife.BindView;
  * 创建日期：2020/6/14 10
  * 描述：该类在适配器中实现
  */
-public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback {
+public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback, HomePageContentAdapter.OnListItemClickListener, LooperPagerAdapter.OnLoopPageItemClickListener {
 
     private ICategoryPagerPresenter mPagerPresenter;
     private int mMaterialId;
@@ -61,7 +64,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
 
     @Override
     protected void initPresenter() {
-        mPagerPresenter = CategoryPagePresenterImpl.getInstance();
+        mPagerPresenter = PresenterManager.getInstance().getCategoryPagePresenter();
         mPagerPresenter.registerViewCallback(this);
     }
 
@@ -156,6 +159,10 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
 
     @Override
     protected void initListener() {
+        //调用set接口逻辑的方法
+        mContentAdapter.setOnListItemClickListener(this);
+        mLooperPagerAdapter.setOnLoopPageItemClickListener(this);
+
         //添加最外层的LinearLayout全局布局监听器
         homePagerParent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -328,5 +335,31 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         if (mPagerPresenter != null) {
             mPagerPresenter.unregisterViewCallback(this);
         }
+    }
+
+    /**
+     * 列表内容被点击了
+     * @param item
+     */
+    @Override
+    public void onItemClick(HomePagerContent.DataBean item) {
+        logUtils.d(this,"点击了条目");
+        handleItemClick(item);
+    }
+
+    private void handleItemClick(HomePagerContent.DataBean item) {
+        String title = item.getTitle();
+        String url = item.getClick_url();
+        String cover = item.getPict_url();
+        // 处理数据
+        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
+        ticketPresenter.getTicket(title,url,cover);
+        startActivity(new Intent(getContext(), TicketActivity.class));
+    }
+
+    @Override
+    public void onLooperItemClick(HomePagerContent.DataBean item) {
+        logUtils.d(this,"点击了滚动条目");
+        handleItemClick(item);
     }
 }

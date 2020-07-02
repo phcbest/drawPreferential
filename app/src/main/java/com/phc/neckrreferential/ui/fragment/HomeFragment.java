@@ -13,8 +13,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.Categories;
-import com.phc.neckrreferential.presenter.impl.HomePresenterImpl;
+import com.phc.neckrreferential.presenter.IHomePresenter;
 import com.phc.neckrreferential.ui.adapter.HomePagerAdapter;
+import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.view.IHoneCallback;
 
@@ -36,7 +37,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     @BindView(R.id.hone_pager)
     public ViewPager mHomePager;
 
-    private HomePresenterImpl mHomePresenter;
+    private IHomePresenter mHomePresenter;
     private HomePagerAdapter mHomePagerAdapter;
 
 
@@ -87,7 +88,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     protected void initPresenter() {
         //重写继承BaseFragment需要的方法initPresenter
         //实例化HomePresenterImpl
-        mHomePresenter = new HomePresenterImpl();
+        mHomePresenter = PresenterManager.getInstance().getHomePresenter();
         //将重写的IHoneCallback接口传递过去
         mHomePresenter.registerViewCallback(this);
     }

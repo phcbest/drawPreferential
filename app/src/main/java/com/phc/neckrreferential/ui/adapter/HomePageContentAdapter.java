@@ -38,6 +38,8 @@ public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContent
 
     List<HomePagerContent.DataBean> mData = new ArrayList<>();
 
+    private OnListItemClickListener mItemClickListener = null ;
+
 
     /**
      * NonNull参数告诉编译器参数非空
@@ -60,6 +62,15 @@ public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContent
         HomePagerContent.DataBean dataBean = mData.get(position);
         //设置数据
         holder.setData(dataBean);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mItemClickListener != null) {
+                    HomePagerContent.DataBean item = mData.get(position);
+                    mItemClickListener.onItemClick(item);
+                }
+            }
+        });
     }
 
     @Override
@@ -127,5 +138,18 @@ public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContent
             sellCountTv.setText(String.format
                     (context.getString(R.string.text_goods_sell_count),dataBean.getVolume()));
         }
+    }
+
+    /**
+     * 该方法将接口暴露出来允许外部给接口逻辑
+     * @param listener
+     */
+    public void setOnListItemClickListener(OnListItemClickListener listener){
+        this.mItemClickListener = listener;
+    }
+
+
+    public interface OnListItemClickListener{
+        void onItemClick(HomePagerContent.DataBean item);
     }
 }

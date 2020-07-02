@@ -1,7 +1,6 @@
 package com.phc.neckrreferential.ui.activity;
 
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -21,16 +20,17 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
 
-
-    public FrameLayout mainPageContainer;
+    
 
     @BindView(R.id.main_navigation_bar)
     public BottomNavigationView mainNavigationBar;
+
     private RedPacketFragment mRedPacketFragment;
     private HomeFragment mHomeFragment;
     private SelectedFragment mSelectedFragment;
     private SearchFragment mSearchFragment;
     private FragmentManager mfm;
+
 
     @Override
     protected void initEvent() {
