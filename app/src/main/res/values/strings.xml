@@ -11,4 +11,5 @@
     <string name="text_goods_original_prise">￥%1$s元</string>
     <string name="text_goods_sell_count">已售%1$d</string>
     <string name="text_data_load_seccess">加载成功</string>
+    <string name="text_tao_kou_ling">淘口令</string>
 </resources>

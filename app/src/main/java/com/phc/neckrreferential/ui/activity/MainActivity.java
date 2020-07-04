@@ -38,6 +38,11 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void initPresenter() {
+
+    }
+
+    @Override
     protected int getLayoutResId() {
         return R.layout.activity_main;
     }

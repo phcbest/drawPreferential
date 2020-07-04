@@ -1,7 +1,7 @@
 package com.phc.neckrreferential.view;
 
 import com.phc.neckrreferential.base.IBaseCallBack;
-import com.phc.neckrreferential.modle.domain.TickResult;
+import com.phc.neckrreferential.modle.domain.TicketResult;
 
 /**
  * 版权：没有版权 看得上就用
@@ -16,5 +16,5 @@ public interface ITicketPagerCallback extends IBaseCallBack {
      * @param cover
      * @param result
      */
-    void onTicketLoaded(String cover, TickResult result);
+    void onTicketLoaded(String cover, TicketResult result);
 }

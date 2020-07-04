@@ -14,6 +14,4 @@ public interface IHoneCallback extends IBaseCallBack {
      * @param categories 使用这个得到返回json
      */
     void onCategoriesLoaded(Categories categories);
-
-
 }

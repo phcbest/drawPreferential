@@ -2,9 +2,13 @@ package com.phc.neckrreferential.modle;
 
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.TicketResult;
+import com.phc.neckrreferential.modle.domain.TicketParams;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Url;
 
 /**
@@ -22,5 +26,6 @@ public interface Api {
     @GET
     Call<HomePagerContent> getHomePagerContent(@Url String url);
 
-
+    @POST("tpwd")
+    Call<TicketResult> getTicket(@Body TicketParams ticketParams);
 }

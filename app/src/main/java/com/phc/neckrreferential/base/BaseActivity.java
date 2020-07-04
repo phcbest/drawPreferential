@@ -23,11 +23,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-
         mBind = ButterKnife.bind(this);
         initView();
         initEvent();
+        initPresenter();
     }
+
+    protected abstract void initPresenter();
 
 
     protected abstract int getLayoutResId();
@@ -44,6 +46,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mBind != null) {
             mBind.unbind();
         }
+        this.relase();
+    }
+
+    protected void relase() {
+
     }
 
 }

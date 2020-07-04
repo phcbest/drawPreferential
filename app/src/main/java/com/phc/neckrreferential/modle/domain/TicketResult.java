@@ -7,7 +7,7 @@ package com.phc.neckrreferential.modle.domain;
  * 创建日期：2020/7/2 15
  * 描述：
  */
-public class TickResult {
+public class TicketResult {
 
     /**
      * success : true
@@ -20,6 +20,16 @@ public class TickResult {
     private int code;
     private String message;
     private DataBeanX data;
+
+    @Override
+    public String toString() {
+        return "TickResult{" +
+                "success=" + success +
+                ", code=" + code +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
 
     public boolean isSuccess() {
         return success;
@@ -54,6 +64,13 @@ public class TickResult {
     }
 
     public static class DataBeanX {
+        @Override
+        public String toString() {
+            return "DataBeanX{" +
+                    "tbk_tpwd_create_response=" + tbk_tpwd_create_response +
+                    '}';
+        }
+
         /**
          * tbk_tpwd_create_response : {"data":{"model":"￥xhQoYC66sMX￥"},"request_id":"64jzpdn6m026"}
          */
@@ -69,10 +86,20 @@ public class TickResult {
         }
 
         public static class TbkTpwdCreateResponseBean {
+            @Override
+            public String toString() {
+                return "TbkTpwdCreateResponseBean{" +
+                        "data=" + data +
+                        ", request_id='" + request_id + '\'' +
+                        '}';
+            }
+
             /**
              * data : {"model":"￥xhQoYC66sMX￥"}
              * request_id : 64jzpdn6m026
              */
+
+
 
             private DataBean data;
             private String request_id;
@@ -94,9 +121,18 @@ public class TickResult {
             }
 
             public static class DataBean {
+                @Override
+                public String toString() {
+                    return "DataBean{" +
+                            "model='" + model + '\'' +
+                            '}';
+                }
+
                 /**
                  * model : ￥xhQoYC66sMX￥
                  */
+
+
 
                 private String model;
 

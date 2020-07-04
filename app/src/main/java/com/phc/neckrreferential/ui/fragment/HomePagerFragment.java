@@ -351,12 +351,17 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
         String title = item.getTitle();
         String url = item.getClick_url();
         String cover = item.getPict_url();
-        // 处理数据
+        // 在跳转之前处理数据，不会有停滞感
+        //TODO 启动TicketActivity
         ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
         ticketPresenter.getTicket(title,url,cover);
         startActivity(new Intent(getContext(), TicketActivity.class));
     }
 
+    /**
+     * 横幅内容被点击了
+     * @param item
+     */
     @Override
     public void onLooperItemClick(HomePagerContent.DataBean item) {
         logUtils.d(this,"点击了滚动条目");
