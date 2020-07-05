@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -349,7 +350,10 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
 
     private void handleItemClick(HomePagerContent.DataBean item) {
         String title = item.getTitle();
-        String url = item.getClick_url();
+        String url = item.getCoupon_click_url();
+        if (TextUtils.isEmpty(url)) {
+            url = item.getClick_url();
+        }
         String cover = item.getPict_url();
         // 在跳转之前处理数据，不会有停滞感
         //TODO 启动TicketActivity

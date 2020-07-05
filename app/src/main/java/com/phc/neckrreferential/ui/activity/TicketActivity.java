@@ -1,11 +1,22 @@
 package com.phc.neckrreferential.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.phc.neckrreferential.R;
@@ -48,6 +59,7 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
     public TextView retryLoadText;
 
     private ITicketPresenter mTicketPresenter;
+    private boolean mHasTaoBaoApp = false;
 
 
     @Override
@@ -57,10 +69,26 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void initPresenter() {
         mTicketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        mTicketPresenter.registerViewCallback(this);
+        if (mTicketPresenter != null) {
+            mTicketPresenter.registerViewCallback(this);
+        }
+        //判断是否安装淘宝
+        // cmp=com.taobao.taobao/com.taobao.tao.TBMainActivity
+        PackageManager pm = getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo("com.taobao.taobao", PackageManager.MATCH_UNINSTALLED_PACKAGES);
+            mHasTaoBaoApp = packageInfo != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            mHasTaoBaoApp = false;
+        }
+        logUtils.d(this, "有没有安装淘宝=====" + mHasTaoBaoApp);
+        //根据有没有安装淘宝修改textview文字
+        mOpenOrCopyBtn.setText(mHasTaoBaoApp ? "打开淘宝领券" : "复制口令");
     }
 
 
@@ -71,6 +99,33 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        //复制按键
+        mOpenOrCopyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //进行复制
+                String tickerCode = mTicketCode.getText().toString().trim();
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                //复制到粘贴板
+                ClipData clipData = ClipData.newPlainText("tao_kou_ling",tickerCode);
+                cm.setPrimaryClip(clipData);
+                //判断有没有淘宝
+                if (mHasTaoBaoApp) {
+                    Intent taobaoIntent = new Intent();
+//                    (name=com.taobao.taobao/com.taobao.tao.TBMainActivity)
+                    ComponentName componentName = new ComponentName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
+                    taobaoIntent.setComponent(componentName);
+                    try {
+                        Toast.makeText(TicketActivity.this, "正在拉起淘宝，请稍作等待", Toast.LENGTH_SHORT).show();
+                        startActivity(taobaoIntent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    Toast.makeText(TicketActivity.this, "复制成功，粘贴分享或打开淘宝", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -98,7 +153,7 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
             String mResult = result.getData().getTbk_tpwd_create_response().getData().getModel();
             mTicketCode.setText(mResult);
         }
-        if(loadingView != null) {
+        if (loadingView != null) {
             loadingView.setVisibility(View.GONE);
         }
     }
@@ -116,7 +171,7 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
 
     @Override
     public void onLoading() {
-        if (loadingView != null){
+        if (loadingView != null) {
             loadingView.setVisibility(View.GONE);
         }
         if (retryLoadText != null) {

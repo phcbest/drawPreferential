@@ -66,10 +66,12 @@ public class LoadingView extends AppCompatImageView {
 
     }
 
+    /**
+     * 该方法在当前activity退出后回调
+     */
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
         stopRotate();
     }
 
