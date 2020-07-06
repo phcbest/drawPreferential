@@ -2,9 +2,10 @@ package com.phc.neckrreferential.modle;
 
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.SelectedContent;
 import com.phc.neckrreferential.modle.domain.SelectedPageCategory;
-import com.phc.neckrreferential.modle.domain.TicketResult;
 import com.phc.neckrreferential.modle.domain.TicketParams;
+import com.phc.neckrreferential.modle.domain.TicketResult;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -31,5 +32,8 @@ public interface Api {
     Call<TicketResult> getTicket(@Body TicketParams ticketParams);
 
     @GET("recommend/categories")
-    Call<SelectedPageCategory> getSelectPageCategories();
+    Call<SelectedPageCategory> getSelectedPageCategories();
+
+    @GET
+    Call<SelectedContent> getSelectedPageContent(@Url String url);
 }
