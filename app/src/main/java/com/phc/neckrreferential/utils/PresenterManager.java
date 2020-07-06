@@ -2,9 +2,11 @@ package com.phc.neckrreferential.utils;
 
 import com.phc.neckrreferential.presenter.ICategoryPagerPresenter;
 import com.phc.neckrreferential.presenter.IHomePresenter;
+import com.phc.neckrreferential.presenter.ISelectedPagePresenter;
 import com.phc.neckrreferential.presenter.ITicketPresenter;
 import com.phc.neckrreferential.presenter.impl.CategoryPagePresenterImpl;
 import com.phc.neckrreferential.presenter.impl.HomePresenterImpl;
+import com.phc.neckrreferential.presenter.impl.SelectedPagePresenterImpl;
 import com.phc.neckrreferential.presenter.impl.TicketPresenterImpl;
 
 /**
@@ -19,6 +21,7 @@ public class PresenterManager {
     private final ICategoryPagerPresenter mCategoryPagePresenter;
     private final IHomePresenter mHomePresenter;
     private final ITicketPresenter mTicketPresenter;
+    private final ISelectedPagePresenter mSelectedPagePresenter;
 
     public static PresenterManager getInstance() {
         return ourInstance;
@@ -33,12 +36,18 @@ public class PresenterManager {
     }
 
     public ITicketPresenter getTicketPresenter() {
+
         return mTicketPresenter;
+    }
+
+    public ISelectedPagePresenter getSelectedPagePresenter() {
+        return mSelectedPagePresenter;
     }
 
     private PresenterManager() {
         mCategoryPagePresenter = new CategoryPagePresenterImpl();
         mHomePresenter = new HomePresenterImpl();
         mTicketPresenter = new TicketPresenterImpl();
+        mSelectedPagePresenter = new SelectedPagePresenterImpl();
     }
 }

@@ -2,6 +2,7 @@ package com.phc.neckrreferential.modle;
 
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.SelectedPageCategory;
 import com.phc.neckrreferential.modle.domain.TicketResult;
 import com.phc.neckrreferential.modle.domain.TicketParams;
 
@@ -28,4 +29,7 @@ public interface Api {
 
     @POST("tpwd")
     Call<TicketResult> getTicket(@Body TicketParams ticketParams);
+
+    @GET("recommend/categories")
+    Call<SelectedPageCategory> getSelectPageCategories();
 }
