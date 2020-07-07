@@ -2,6 +2,7 @@ package com.phc.neckrreferential.ui.fragment;
 
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.phc.neckrreferential.R;
@@ -9,6 +10,8 @@ import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.SelectedContent;
 import com.phc.neckrreferential.modle.domain.SelectedPageCategory;
 import com.phc.neckrreferential.presenter.ISelectedPagePresenter;
+import com.phc.neckrreferential.ui.adapter.SelectedPageContentAdapter;
+import com.phc.neckrreferential.ui.adapter.SelectedPageLeftAdapter;
 import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.view.ISelectedPageCallback;
@@ -24,7 +27,7 @@ import butterknife.BindView;
  * 创建日期：2020/6/6 10
  * 描述：
  */
-public class SelectedFragment extends BaseFragment implements ISelectedPageCallback {
+public class SelectedFragment extends BaseFragment implements ISelectedPageCallback, SelectedPageLeftAdapter.OnLeftItemClickListener {
 
 
     @BindView(R.id.left_category_list)
@@ -34,6 +37,8 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
     RecyclerView rightContentList;
 
     private ISelectedPagePresenter mSelectedPagePresenter;
+    private SelectedPageLeftAdapter mLeftAdapter;
+    private SelectedPageContentAdapter mRightAdapter;
 
     @Override
     protected int getRootViewResId() {
@@ -43,6 +48,20 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
     @Override
     protected void initView(View rootView) {
         setUpState(State.SUCCESS);
+        leftCategoryList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLeftAdapter = new SelectedPageLeftAdapter();
+        leftCategoryList.setAdapter(mLeftAdapter);
+
+        rightContentList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRightAdapter = new SelectedPageContentAdapter();
+        rightContentList.setAdapter(mRightAdapter);
+
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mLeftAdapter.setOnLeftItemClickListener(this);
     }
 
     @Override
@@ -53,17 +72,25 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
     }
 
     @Override
+
+
+
+
     public void onCategoriseLoaded(SelectedPageCategory categories) {
+        setUpState(State.SUCCESS);
+        mLeftAdapter.setData(categories);
         //拿到分类内容
         logUtils.d(this, "精选页面分类数据" + categories.toString());
         List<SelectedPageCategory.DataBean> data = categories.getData();
         mSelectedPagePresenter.getContentByCategory(data.get(0));
         //更新ui
+
     }
 
     @Override
     public void onContentLoaded(SelectedContent content) {
         logUtils.d(this, "精选页面分类内容数据" + content.getData().getTbk_uatm_favorites_item_get_response().toString());
+        mRightAdapter.setData(content);
     }
 
     @Override
@@ -73,11 +100,18 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
 
     @Override
     public void onLoading() {
-
+        setUpState(State.LOADING);
     }
 
     @Override
     public void onEmpty() {
 
+    }
+
+    @Override
+    public void onLeftItemClick(SelectedPageCategory.DataBean item) {
+        //左边分类被点击
+        mSelectedPagePresenter.getContentByCategory(item);
+        logUtils.d(this,"点击了精选页面左边");
     }
 }
