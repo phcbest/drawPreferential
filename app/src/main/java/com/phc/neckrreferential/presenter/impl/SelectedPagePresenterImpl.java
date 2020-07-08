@@ -28,7 +28,6 @@ public class SelectedPagePresenterImpl implements ISelectedPagePresenter {
 
     private ISelectedPageCallback mViewCallback = null;
     private final Api mApi;
-    private SelectedPageCategory.DataBean mCurrentCategoryItem = null;
 
     public SelectedPagePresenterImpl() {
         Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
@@ -78,11 +77,12 @@ public class SelectedPagePresenterImpl implements ISelectedPagePresenter {
     @Override
     public void getContentByCategory(SelectedPageCategory.DataBean item) {
 
-        this.mCurrentCategoryItem = item;
         int categoryId = item.getFavorites_id();
         String targetUrl = UrlUtils.getSelectedPageContentUrl(categoryId);
         Call<SelectedContent> task = mApi.getSelectedPageContent(targetUrl);
-        logUtils.d(this,"精选界面请求内容参数"+item.getFavorites_id());
+        logUtils.d(this, "精选界面请求内容参数" + item.getFavorites_id());
+
+
         task.enqueue(new Callback<SelectedContent>() {
             @Override
             public void onResponse(Call<SelectedContent> call, Response<SelectedContent> response) {
@@ -105,13 +105,13 @@ public class SelectedPagePresenterImpl implements ISelectedPagePresenter {
                 onLoadedError();
             }
         });
+
+
     }
 
     @Override
     public void reLoadContent() {
-        if (mCurrentCategoryItem != null) {
-            this.getContentByCategory(mCurrentCategoryItem);
-        }
+        this.getCategory();
     }
 
     @Override

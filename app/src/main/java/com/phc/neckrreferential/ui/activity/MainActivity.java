@@ -106,8 +106,8 @@ public class MainActivity extends BaseActivity {
             //添加进来了，使用show让他出现
             fragmentTransaction.show(targetFragment);
         }
-        //判断是否有最后一个fragment
-        if (lastOneFragment != null) {
+        //判断是否有最后一个fragment 如果最后一个点击和新点击的是一样的直接退出判断
+        if (lastOneFragment != null && lastOneFragment != targetFragment) {
             //有就隐藏追
             fragmentTransaction.hide(lastOneFragment);
         }
