@@ -15,5 +15,6 @@
     <string name="text_selected_title">精选宝贝</string>
     <string name="text_no_off">没有券了，下次早点来吧</string>
     <string name="text_selected_right_final_price">原价：￥%1$s元</string>
+    <string name="text_on_sell_title">特惠宝贝</string>
 
 </resources>

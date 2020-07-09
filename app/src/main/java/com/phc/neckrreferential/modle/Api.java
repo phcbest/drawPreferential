@@ -2,6 +2,7 @@ package com.phc.neckrreferential.modle;
 
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.OnSellContent;
 import com.phc.neckrreferential.modle.domain.SelectedContent;
 import com.phc.neckrreferential.modle.domain.SelectedPageCategory;
 import com.phc.neckrreferential.modle.domain.TicketParams;
@@ -36,4 +37,7 @@ public interface Api {
 
     @GET
     Call<SelectedContent> getSelectedPageContent(@Url String url);
+
+    @GET
+    Call<OnSellContent>  getOnSellPageContent(@Url String url);
 }

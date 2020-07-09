@@ -11,7 +11,7 @@ import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.base.BaseActivity;
 import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.ui.fragment.HomeFragment;
-import com.phc.neckrreferential.ui.fragment.RedPacketFragment;
+import com.phc.neckrreferential.ui.fragment.OnSellFragment;
 import com.phc.neckrreferential.ui.fragment.SearchFragment;
 import com.phc.neckrreferential.ui.fragment.SelectedFragment;
 import com.phc.neckrreferential.utils.logUtils;
@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_navigation_bar)
     public BottomNavigationView mainNavigationBar;
 
-    private RedPacketFragment mRedPacketFragment;
+    private OnSellFragment mOnSellFragment;
     private HomeFragment mHomeFragment;
     private SelectedFragment mSelectedFragment;
     private SearchFragment mSearchFragment;
@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
      */
     private void initFragment() {
         mHomeFragment = new HomeFragment();
-        mRedPacketFragment = new RedPacketFragment();
+        mOnSellFragment = new OnSellFragment();
         mSelectedFragment = new SelectedFragment();
         mSearchFragment = new SearchFragment();
         mfm = getSupportFragmentManager();
@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity {
                     switchFragment(mSelectedFragment);
                 } else if (item.getItemId() == R.id.red_packet) {
                     logUtils.i(this, "切换到了red_packet");
-                    switchFragment(mRedPacketFragment);
+                    switchFragment(mOnSellFragment);
                 } else if (item.getItemId() == R.id.search) {
                     logUtils.w(this, "切换到了search");
                     switchFragment(mSearchFragment);
