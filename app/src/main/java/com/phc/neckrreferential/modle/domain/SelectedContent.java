@@ -166,7 +166,7 @@ public class SelectedContent {
                     this.uatm_tbk_item = uatm_tbk_item;
                 }
 
-                public static class UatmTbkItemBean {
+                public static class UatmTbkItemBean implements IBaseInfo {
                     @Override
                     public String toString() {
                         return "UatmTbkItemBean{" +
@@ -352,8 +352,19 @@ public class SelectedContent {
                         this.status = status;
                     }
 
+                    @Override
+                    public String getCover() {
+                        return this.pict_url;
+                    }
+
+                    @Override
                     public String getTitle() {
-                        return title;
+                        return this.title;
+                    }
+
+                    @Override
+                    public String getUrl() {
+                        return coupon_click_url;
                     }
 
                     public void setTitle(String title) {

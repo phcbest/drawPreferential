@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.IBaseInfo;
 import com.phc.neckrreferential.utils.UrlUtils;
 import com.phc.neckrreferential.utils.logUtils;
 
@@ -150,6 +151,6 @@ public class HomePageContentAdapter extends RecyclerView.Adapter<HomePageContent
 
 
     public interface OnListItemClickListener{
-        void onItemClick(HomePagerContent.DataBean item);
+        void onItemClick(IBaseInfo item);
     }
 }

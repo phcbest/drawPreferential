@@ -9,6 +9,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.IBaseInfo;
 import com.phc.neckrreferential.utils.UrlUtils;
 import com.phc.neckrreferential.utils.logUtils;
 
@@ -88,7 +89,7 @@ public class LooperPagerAdapter extends PagerAdapter {
     }
 
     public interface OnLoopPageItemClickListener{
-        void onLooperItemClick(HomePagerContent.DataBean item);
+        void onLooperItemClick(IBaseInfo item);
     }
 
 }

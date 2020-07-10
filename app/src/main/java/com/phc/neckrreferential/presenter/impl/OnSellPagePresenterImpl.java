@@ -35,6 +35,7 @@ public class OnSellPagePresenterImpl implements IOnSellPagePresenter {
         mApi = retrofit.create(Api.class);
     }
 
+
     @Override
     public void getOnSellContent() {
         if (mIsLoading) {
@@ -74,7 +75,7 @@ public class OnSellPagePresenterImpl implements IOnSellPagePresenter {
             try {
                 if (isEmpty(result)) {
                     onEmpty();
-                }else {
+                } else {
                     mOnSellPageCallback.onContentLoadedSuccess(result);
                 }
             } catch (Exception e) {
@@ -83,9 +84,12 @@ public class OnSellPagePresenterImpl implements IOnSellPagePresenter {
             }
         }
     }
-    private boolean isEmpty(OnSellContent result){
-        int size = result.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data().size();
-        return size == 0;
+
+    private boolean isEmpty(OnSellContent result) {
+        return result.getData().getTbk_dg_optimus_material_response() == null;
+//        int size = result.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data().size();
+//        return size == 0;
+
     }
 
     private void onEmpty() {
@@ -152,8 +156,9 @@ public class OnSellPagePresenterImpl implements IOnSellPagePresenter {
     private void onMoreLoaded(OnSellContent result) {
         if (mOnSellPageCallback != null) {
             if (isEmpty(result)) {
+                mCurrentPage--;
                 mOnSellPageCallback.onMoreLoadedEmpty();
-            }else {
+            } else {
                 mOnSellPageCallback.onMoreLoaded(result);
             }
         }

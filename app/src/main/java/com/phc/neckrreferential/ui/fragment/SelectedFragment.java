@@ -1,9 +1,11 @@
 package com.phc.neckrreferential.ui.fragment;
 
-import android.content.Intent;
 import android.graphics.Rect;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,12 +16,11 @@ import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.SelectedContent;
 import com.phc.neckrreferential.modle.domain.SelectedPageCategory;
 import com.phc.neckrreferential.presenter.ISelectedPagePresenter;
-import com.phc.neckrreferential.presenter.ITicketPresenter;
-import com.phc.neckrreferential.ui.activity.TicketActivity;
 import com.phc.neckrreferential.ui.adapter.SelectedPageContentAdapter;
 import com.phc.neckrreferential.ui.adapter.SelectedPageLeftAdapter;
 import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.SizeUtils;
+import com.phc.neckrreferential.utils.TicketUtils;
 import com.phc.neckrreferential.utils.ToastUtils;
 import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.view.ISelectedPageCallback;
@@ -43,6 +44,9 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
 
     @BindView(R.id.right_content_list)
     RecyclerView rightContentList;
+
+    @BindView(R.id.fragment_bar_title_tv)
+    TextView barTitleTv;
 
     private ISelectedPagePresenter mSelectedPagePresenter;
     private SelectedPageLeftAdapter mLeftAdapter;
@@ -69,9 +73,9 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
                 int topAndBottom = SizeUtils.dip2px(getContext(), 4);
                 int leftAndRight = SizeUtils.dip2px(getContext(), 8);
                 outRect.top = topAndBottom;
-                outRect.bottom = topAndBottom ;
-                outRect.left =  leftAndRight;
-                outRect.right = leftAndRight ;
+                outRect.bottom = topAndBottom;
+                outRect.left = leftAndRight;
+                outRect.right = leftAndRight;
             }
         });
 
@@ -121,6 +125,14 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
     }
 
     @Override
+    protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_with_bar_layout, container, false);
+        TextView barTitleTv = (TextView)view.findViewById(R.id.fragment_bar_title_tv);
+        barTitleTv.setText(R.string.text_selected_title);
+        return view;
+    }
+
+    @Override
     public void onError() {
         setUpState(State.ERROR);
     }
@@ -140,7 +152,7 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
         mSelectedPagePresenter.getContentByCategory(item);
         //开始加载数据，让右侧界面不能显示，等数据加载到了再显示
         rightContentList.setVisibility(View.GONE);
-        logUtils.d(this,"点击了精选页面左边");
+        logUtils.d(this, "点击了精选页面左边");
     }
 
     @Override
@@ -150,16 +162,6 @@ public class SelectedFragment extends BaseFragment implements ISelectedPageCallb
             ToastUtils.showToast(getContext().getString(R.string.text_no_off));
             return;
         }
-        String title = item.getTitle();
-        String url = item.getCoupon_click_url();
-        if (TextUtils.isEmpty(url)) {
-            url = item.getClick_url();
-        }
-        String cover = item.getPict_url();
-        // 在跳转之前处理数据，不会有停滞感
-        //TODO 启动TicketActivity
-        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title,url,cover);
-        startActivity(new Intent(getContext(), TicketActivity.class));
+        TicketUtils.toTicketPage(getContext(),item);
     }
 }

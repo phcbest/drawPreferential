@@ -144,8 +144,7 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
 //
         if (mCover != null && !TextUtils.isEmpty(cover)) {
             ViewGroup.LayoutParams layoutParams = mCover.getLayoutParams();
-            int mCoverSize = Math.max(layoutParams.height, layoutParams.width) / 100 * 50;
-            String coverPath = UrlUtils.getCoverPath(cover, mCoverSize);
+            String coverPath = UrlUtils.getCoverPath(cover);
             logUtils.d(this, "领券页面的图片url=====" + coverPath);
             Glide.with(this).load(coverPath).into(mCover);
         }

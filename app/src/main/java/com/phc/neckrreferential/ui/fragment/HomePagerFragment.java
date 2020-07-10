@@ -1,10 +1,8 @@
 package com.phc.neckrreferential.ui.fragment;
 
-import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
@@ -23,15 +21,15 @@ import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
+import com.phc.neckrreferential.modle.domain.IBaseInfo;
 import com.phc.neckrreferential.presenter.ICategoryPagerPresenter;
-import com.phc.neckrreferential.presenter.ITicketPresenter;
-import com.phc.neckrreferential.ui.activity.TicketActivity;
 import com.phc.neckrreferential.ui.adapter.HomePageContentAdapter;
 import com.phc.neckrreferential.ui.adapter.LooperPagerAdapter;
 import com.phc.neckrreferential.ui.custom.AutoLoopViewPager;
 import com.phc.neckrreferential.utils.Constants;
 import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.SizeUtils;
+import com.phc.neckrreferential.utils.TicketUtils;
 import com.phc.neckrreferential.utils.ToastUtils;
 import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.view.ICategoryPagerCallback;
@@ -343,23 +341,13 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
      * @param item
      */
     @Override
-    public void onItemClick(HomePagerContent.DataBean item) {
+    public void onItemClick(IBaseInfo item) {
         logUtils.d(this,"点击了条目");
         handleItemClick(item);
     }
 
-    private void handleItemClick(HomePagerContent.DataBean item) {
-        String title = item.getTitle();
-        String url = item.getCoupon_click_url();
-        if (TextUtils.isEmpty(url)) {
-            url = item.getClick_url();
-        }
-        String cover = item.getPict_url();
-        // 在跳转之前处理数据，不会有停滞感
-        //TODO 启动TicketActivity
-        ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title,url,cover);
-        startActivity(new Intent(getContext(), TicketActivity.class));
+    private void handleItemClick(IBaseInfo item) {
+        TicketUtils.toTicketPage(getContext(),item);
     }
 
     /**
@@ -367,7 +355,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
      * @param item
      */
     @Override
-    public void onLooperItemClick(HomePagerContent.DataBean item) {
+    public void onLooperItemClick(IBaseInfo item) {
         logUtils.d(this,"点击了滚动条目");
         handleItemClick(item);
     }
