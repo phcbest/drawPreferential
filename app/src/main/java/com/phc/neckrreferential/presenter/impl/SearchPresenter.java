@@ -53,7 +53,7 @@ public class SearchPresenter implements ISearchPagePresenter {
     @Override
     public void getHistories() {
         Histories histories = mJsonCacheUtils.getValue(KEY_HISTORIES, Histories.class);
-        if (mSearchViewCallback != null && histories == null
+        if (mSearchViewCallback != null && histories != null
                 && histories.getHistories() != null && histories.getHistories().size() != 0) {
             mSearchViewCallback.onHistoriesLoaded(histories.getHistories());
         }
@@ -72,9 +72,8 @@ public class SearchPresenter implements ISearchPagePresenter {
      * @param history
      */
     private void saveHistory(String history) {
-
         Histories histories = mJsonCacheUtils.getValue(KEY_HISTORIES, Histories.class);
-
+        //如果关键字存在就干掉后添加
         List<String> historiesList = null;
         if (histories != null && histories.getHistories() != null) {
             historiesList = histories.getHistories();
@@ -98,7 +97,7 @@ public class SearchPresenter implements ISearchPagePresenter {
         //添加记录
         historiesList.add(history);
         //保存记录
-        mJsonCacheUtils.saveCache(KEY_HISTORIES, historiesList);
+        mJsonCacheUtils.saveCache(KEY_HISTORIES, histories);
     }
 
 
@@ -152,7 +151,7 @@ public class SearchPresenter implements ISearchPagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
             //TODO 可能有bug ，返回真假的逻辑没捋顺
-            return true;
+            return false;
         }
     }
 

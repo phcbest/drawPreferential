@@ -33,7 +33,7 @@ public class JsonCacheUtils {
     public void saveCache(String key, Object value, long duration) {
         SharedPreferences.Editor edit = mSharedPreferences.edit();
         String valueStr = mGson.toJson(value);
-        if (duration != -1) {
+        if (duration != -1L) {
             duration += System.currentTimeMillis();
         }
         CacheWithDuration cacheWithDuration = new CacheWithDuration(duration, valueStr);
@@ -68,6 +68,6 @@ public class JsonCacheUtils {
         if (sJsonCacheUtils == null) {
             sJsonCacheUtils = new JsonCacheUtils();
         }
-        return null;
+        return sJsonCacheUtils;
     }
 }
