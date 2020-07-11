@@ -3,6 +3,8 @@ package com.phc.neckrreferential.modle;
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
 import com.phc.neckrreferential.modle.domain.OnSellContent;
+import com.phc.neckrreferential.modle.domain.SearchRecommend;
+import com.phc.neckrreferential.modle.domain.SearchResult;
 import com.phc.neckrreferential.modle.domain.SelectedContent;
 import com.phc.neckrreferential.modle.domain.SelectedPageCategory;
 import com.phc.neckrreferential.modle.domain.TicketParams;
@@ -12,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
@@ -40,4 +43,10 @@ public interface Api {
 
     @GET
     Call<OnSellContent>  getOnSellPageContent(@Url String url);
+
+    @GET("search/recommend")
+    Call<SearchRecommend> getRecommendWords();
+
+    @GET("search")
+    Call<SearchResult> doSearch (@Query("page")int page,@Query("keyword")String keyword);
 }
