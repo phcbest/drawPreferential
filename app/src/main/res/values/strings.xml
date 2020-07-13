@@ -18,5 +18,7 @@
     <string name="text_selected_right_final_price">原价：￥%1$s元</string>
     <string name="text_on_sell_title">特惠宝贝</string>
     <string name="text_on_sell_off_end">券后价：%.2f</string>
+    <string name="text_search_recommend">热门搜索</string>
+    <string name="text_search_history">历史记录</string>
 
 </resources>

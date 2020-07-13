@@ -56,12 +56,18 @@ public class SearchPresenter implements ISearchPagePresenter {
         if (mSearchViewCallback != null && histories != null
                 && histories.getHistories() != null && histories.getHistories().size() != 0) {
             mSearchViewCallback.onHistoriesLoaded(histories.getHistories());
+        }else {
+            //必须要回调该方法，用来控制组件是否显示
+            mSearchViewCallback.onHistoriesLoaded(null);
         }
     }
 
     @Override
     public void delHistories() {
         mJsonCacheUtils.delCache(KEY_HISTORIES);
+        if (mSearchViewCallback != null) {
+            mSearchViewCallback.onHistoriesDeleted();
+        }
     }
 
     public static final String KEY_HISTORIES = "key_histories";
