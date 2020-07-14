@@ -8,6 +8,8 @@ import com.phc.neckrreferential.modle.domain.IBaseInfo;
 import com.phc.neckrreferential.presenter.ITicketPresenter;
 import com.phc.neckrreferential.ui.activity.TicketActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 版权：没有版权 看得上就用
  *
@@ -16,7 +18,7 @@ import com.phc.neckrreferential.ui.activity.TicketActivity;
  * 描述：
  */
 public class TicketUtils {
-    public static void toTicketPage(Context context ,IBaseInfo baseInfo){
+    public static void toTicketPage(Context context ,@NotNull IBaseInfo baseInfo){
         //item被点击了 ,需要进入下一个活动
         String title = baseInfo.getTitle();
         String url = baseInfo.getUrl();

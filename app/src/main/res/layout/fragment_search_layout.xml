@@ -22,9 +22,17 @@
             android:text="搜索"
             android:textColor="@color/white" />
 
+       <!-- {@deprecated This attribute is deprecated. Use <code>maxLines</code> instead to change
+        the layout of a static text, and use the <code>textMultiLine</code> flag in the
+        inputType attribute instead for editable text views (if both singleLine and inputType
+        are supplied, the inputType flags will override the value of singleLine). } &ndash;&gt;-->
         <EditText
+            android:id="@+id/search_input_box"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:layout_toStartOf="@+id/search_btn"
@@ -33,6 +41,16 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/search_clean_btn"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignEnd="@id/search_input_box"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@mipmap/remove"
+            android:visibility="gone" />
 
 
     </RelativeLayout>

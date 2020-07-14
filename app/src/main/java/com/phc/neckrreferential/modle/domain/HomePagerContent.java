@@ -65,7 +65,7 @@ public class HomePagerContent {
                 '}';
     }
 
-    public static class DataBean implements IBaseInfo {
+    public static class DataBean implements ILinearItemInfo {
         @Override
         public String toString() {
             return "DataBean{" +
@@ -358,6 +358,17 @@ public class HomePagerContent {
             this.user_type = user_type;
         }
 
+        @Override
+        public String getFinalPrise() {
+            return zk_final_price;
+        }
+
+        @Override
+        public long getCouponAmount() {
+            return coupon_amount;
+        }
+
+        @Override
         public long getVolume() {
             return volume;
         }

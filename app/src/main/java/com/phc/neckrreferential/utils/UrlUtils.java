@@ -1,5 +1,7 @@
 package com.phc.neckrreferential.utils;
 
+import android.text.TextUtils;
+
 /**
  * 版权：没有版权 看得上就用
  *
@@ -13,14 +15,22 @@ public class UrlUtils {
     }
 
     public static String getCoverPath(String pict_url,int size) {
-        return "https:" + pict_url + "_" + size + "x" + size + ".jpg";
+        if (!TextUtils.isEmpty(pict_url)) {
+            return "https:" + pict_url + "_" + size + "x" + size + ".jpg";
+        }else {
+            return null;
+        }
     }
 
     public static String getCoverPath(String pict_url) {
-        if(pict_url.startsWith("http") || pict_url.startsWith("https")) {
-            return pict_url;
-        } else {
-            return "https:" + pict_url;
+        if (!TextUtils.isEmpty(pict_url)) {
+            if(pict_url.startsWith("http") || pict_url.startsWith("https")) {
+                return pict_url;
+            } else {
+                return "https:" + pict_url;
+            }
+        }else {
+            return null;
         }
     }
 

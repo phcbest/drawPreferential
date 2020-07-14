@@ -23,7 +23,7 @@ import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.modle.domain.HomePagerContent;
 import com.phc.neckrreferential.modle.domain.IBaseInfo;
 import com.phc.neckrreferential.presenter.ICategoryPagerPresenter;
-import com.phc.neckrreferential.ui.adapter.HomePageContentAdapter;
+import com.phc.neckrreferential.ui.adapter.LinearItemContentAdapter;
 import com.phc.neckrreferential.ui.adapter.LooperPagerAdapter;
 import com.phc.neckrreferential.ui.custom.AutoLoopViewPager;
 import com.phc.neckrreferential.utils.Constants;
@@ -45,11 +45,11 @@ import butterknife.BindView;
  * 创建日期：2020/6/14 10
  * 描述：该类在适配器中实现
  */
-public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback, HomePageContentAdapter.OnListItemClickListener, LooperPagerAdapter.OnLoopPageItemClickListener {
+public class HomePagerFragment extends BaseFragment implements ICategoryPagerCallback, LinearItemContentAdapter.OnListItemClickListener, LooperPagerAdapter.OnLoopPageItemClickListener {
 
     private ICategoryPagerPresenter mPagerPresenter;
     private int mMaterialId;
-    private HomePageContentAdapter mContentAdapter;
+    private LinearItemContentAdapter mContentAdapter;
     private LooperPagerAdapter mLooperPagerAdapter;
 
     public static HomePagerFragment newInstance(Categories.DataBean category) {
@@ -124,19 +124,18 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view
                     , @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top = 8;
-                outRect.bottom = 8;
+                outRect.top = SizeUtils.dip2px(getContext(),2f);
+                outRect.bottom = SizeUtils.dip2px(getContext(),2f);
             }
         });
         //创建适配器，设置适配器
-        mContentAdapter = new HomePageContentAdapter();
+        mContentAdapter = new LinearItemContentAdapter();
         mContentList.setAdapter(mContentAdapter);
 
         mLooperPagerAdapter = new LooperPagerAdapter();
         looperPager.setAdapter(mLooperPagerAdapter);
 
         //设置refresh内容
-//        TODO 设置twinklingRefreshLayout页面能否越界拉伸
         twinklingRefreshLayout.setEnableOverScroll(true);
         twinklingRefreshLayout.setEnableRefresh(false);
         twinklingRefreshLayout.setEnableLoadmore(true);
@@ -296,9 +295,8 @@ public class HomePagerFragment extends BaseFragment implements ICategoryPagerCal
 
     @Override
     public void onLoaderMoreLoaded(List<HomePagerContent.DataBean> contents) {
-        mContentAdapter.addData(contents);
         finishLoadmore();
-        ToastUtils.showToast("加载了"+contents.size()+"条");
+        mContentAdapter.addData(contents);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
