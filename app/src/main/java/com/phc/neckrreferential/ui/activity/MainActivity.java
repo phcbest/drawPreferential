@@ -18,12 +18,12 @@ import com.phc.neckrreferential.utils.logUtils;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements IMainActivity{
 
     
 
     @BindView(R.id.main_navigation_bar)
-    public BottomNavigationView mainNavigationBar;
+    public BottomNavigationView mNavigationView;
 
     private OnSellFragment mOnSellFragment;
     private HomeFragment mHomeFragment;
@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initListener() {
-        mainNavigationBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.home) {
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity {
         }
         //判断是否有最后一个fragment 如果最后一个点击和新点击的是一样的直接退出判断
         if (lastOneFragment != null && lastOneFragment != targetFragment) {
-            //有就隐藏追
+            //有就隐藏
             fragmentTransaction.hide(lastOneFragment);
         }
         //将目标fragment保存为最后一个fragment
@@ -116,5 +116,12 @@ public class MainActivity extends BaseActivity {
         //直接使用更换的方法会导致重新加载，所以使用添加和隐藏
 //        fragmentTransaction.replace(R.id.main_page_container, targetFragment);
         fragmentTransaction.commit();
+    }
+
+
+    @Override
+    public void switch2Search() {
+        //切换导航栏中的选中,于点击同效果
+        mNavigationView.setSelectedItemId(R.id.search);
     }
 }

@@ -7,6 +7,7 @@ import com.phc.neckrreferential.modle.domain.SearchResult;
 import com.phc.neckrreferential.presenter.ISearchPagePresenter;
 import com.phc.neckrreferential.utils.JsonCacheUtils;
 import com.phc.neckrreferential.utils.RetrofitManager;
+import com.phc.neckrreferential.utils.logUtils;
 import com.phc.neckrreferential.view.ISearchViewCallback;
 
 import java.net.HttpURLConnection;
@@ -30,7 +31,7 @@ public class SearchPresenter implements ISearchPagePresenter {
     private final Api mApi;
     private ISearchViewCallback mSearchViewCallback = null;
 
-    public static final int DEFAULT_HISTORIES_SIZE = 10;
+    public static final int DEFAULT_HISTORIES_SIZE = 9;
     private int mHistoriesMaxSize = DEFAULT_HISTORIES_SIZE;
 
 
@@ -55,8 +56,9 @@ public class SearchPresenter implements ISearchPagePresenter {
         Histories histories = mJsonCacheUtils.getValue(KEY_HISTORIES, Histories.class);
         if (mSearchViewCallback != null && histories != null
                 && histories.getHistories() != null && histories.getHistories().size() != 0) {
+            logUtils.d(this, "presenter中的历史记录数据" + histories.getHistories().toString());
             mSearchViewCallback.onHistoriesLoaded(histories.getHistories());
-        }else {
+        } else {
             //必须要回调该方法，用来控制组件是否显示
             mSearchViewCallback.onHistoriesLoaded(null);
         }
@@ -79,9 +81,10 @@ public class SearchPresenter implements ISearchPagePresenter {
      */
     private void saveHistory(String history) {
         Histories histories = mJsonCacheUtils.getValue(KEY_HISTORIES, Histories.class);
+        logUtils.d(this,""+histories);
         //如果关键字存在就干掉后添加
         List<String> historiesList = null;
-        if (histories != null && histories.getHistories() != null) {
+        if (histories != null && histories.getHistories().size() != 0) {
             historiesList = histories.getHistories();
             if (historiesList.contains(history)) {
                 historiesList.remove(history);
@@ -94,14 +97,16 @@ public class SearchPresenter implements ISearchPagePresenter {
         if (histories == null) {
             histories = new Histories();
         }
-        histories.setHistories(historiesList);
 
         //限制个数
         if (historiesList.size() > mHistoriesMaxSize) {
             historiesList = historiesList.subList(0, mHistoriesMaxSize);
+            historiesList.remove(0);
         }
-        //添加记录
         historiesList.add(history);
+
+        histories.setHistories(historiesList);
+        logUtils.d(this, "保存进去的搜索历史" +historiesList.toString());
         //保存记录
         mJsonCacheUtils.saveCache(KEY_HISTORIES, histories);
     }

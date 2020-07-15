@@ -20,5 +20,6 @@
     <string name="text_on_sell_off_end">券后价：%.2f</string>
     <string name="text_search_recommend">热门搜索</string>
     <string name="text_search_history">历史记录</string>
+    <string name="text_click_qrcode_btn">点击扫描二维码</string>
 
 </resources>

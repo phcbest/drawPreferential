@@ -1,6 +1,10 @@
 package com.phc.neckrreferential.base;
 
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +26,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置窗口灰色，清明节效果
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        View contentContainer = getWindow().getDecorView();
+//        contentContainer.setLayerType(View.LAYER_TYPE_SOFTWARE,paint);
+        //----------------------------------------------------
         setContentView(getLayoutResId());
         mBind = ButterKnife.bind(this);
         initView();

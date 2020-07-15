@@ -1,12 +1,17 @@
 package com.phc.neckrreferential.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -14,6 +19,9 @@ import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.base.BaseFragment;
 import com.phc.neckrreferential.modle.domain.Categories;
 import com.phc.neckrreferential.presenter.IHomePresenter;
+import com.phc.neckrreferential.ui.activity.IMainActivity;
+import com.phc.neckrreferential.ui.activity.MainActivity;
+import com.phc.neckrreferential.ui.activity.ScanQrCodeActivity;
 import com.phc.neckrreferential.ui.adapter.HomePagerAdapter;
 import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.logUtils;
@@ -36,6 +44,15 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
 
     @BindView(R.id.hone_pager)
     public ViewPager mHomePager;
+    @BindView(R.id.logo)
+    TextView logo;
+
+    //进入扫描二维码的activity
+    @BindView(R.id.scan_icon)
+    ImageButton scanBtn;
+    //搜索框
+    @BindView(R.id.home_search_input_box)
+    EditText mSearchInputBox;
 
     private IHomePresenter mHomePresenter;
     private HomePagerAdapter mHomePagerAdapter;
@@ -43,6 +60,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
 
     /**
      * 这个是必须重写的抽象方法，主要是给baseFragment提供加载成功页面布局,成功页面的布局在base_home_fragment_layout框架内
+     *
      * @return
      */
     @Override
@@ -52,19 +70,20 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
 
     /**
      * 外部框架替换
+     *
      * @param inflater
      * @param container
      * @return
      */
     @Override
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.base_home_fragment_layout,container,false);
+        return inflater.inflate(R.layout.base_home_fragment_layout, container, false);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        logUtils.d(this,"homeFragment_onCreateView.................");
+        logUtils.d(this, "homeFragment_onCreateView.................");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -72,7 +91,7 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        logUtils.d(this,"homeFragment_onDestroyView.................");
+        logUtils.d(this, "homeFragment_onDestroyView.................");
     }
 
     @Override
@@ -82,6 +101,25 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
         //给viewPager设置适配器，获取子fragment管理器
         mHomePagerAdapter = new HomePagerAdapter(getChildFragmentManager());
         mHomePager.setAdapter(mHomePagerAdapter);
+    }
+
+    @Override
+    protected void initListener() {
+        //扫描二维码按钮
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //跳转到扫码界面
+                startActivity(new Intent(getContext(), ScanQrCodeActivity.class));
+            }
+        });
+        //输入框点击事件
+        mSearchInputBox.setOnClickListener(v -> {
+            FragmentActivity actvity = getActivity();
+            if (actvity instanceof IMainActivity) {
+                ((MainActivity)actvity).switch2Search();
+            }
+        });
     }
 
     @Override
@@ -110,14 +148,15 @@ public class HomeFragment extends BaseFragment implements IHoneCallback {
     }
 
     /**
-     *数据返回成功
+     * 数据返回成功
+     *
      * @param categories 使用这个得到返回json
      */
     @Override
     public void onCategoriesLoaded(Categories categories) {
         setUpState(State.SUCCESS);
         //加载的数据从这里回来，如果适配器不为null，就调用适配器内部的setCategoryList方法，将有数据的Categories对象传递进去
-        if (mHomePagerAdapter!=null) {
+        if (mHomePagerAdapter != null) {
 //            TODO:这里可以更改首页viewPage的load数量
 //            mHomePager.setOffscreenPageLimit(0);
             mHomePagerAdapter.setCategoryList(categories);

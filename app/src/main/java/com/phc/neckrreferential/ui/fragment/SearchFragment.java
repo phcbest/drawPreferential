@@ -170,7 +170,7 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback,
                     //需要收起键盘
                     KeyboardUtils.hide(getContext(), v);
                 }
-            }else {
+            } else {
                 KeyboardUtils.hide(getContext(), v);
             }
         });
@@ -178,7 +178,7 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback,
         mCleanInputBtn.setOnClickListener(v -> {
             //需要按了清除历史，需要清空输入框And显示历史记录和推荐
             mSearchInputBox.setText("");
-            switch2HistoryPage();
+            switch2HistoryAndRecommendView();
         });
         //监听输入框的变换，如果有字存在，就显示清空文字的按钮
         mSearchInputBox.addTextChangedListener(new TextWatcher() {
@@ -193,6 +193,10 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback,
                 mCleanInputBtn.setVisibility(hasInput(true) ? View.VISIBLE : View.GONE);
                 //文字变化的时候，如果有内容，就搜索框右侧按钮修改为搜索
                 mSearchBtn.setText(hasInput(false) ? "搜索" : "取消");
+                //文字为null的时候不显示商品页面，显示推荐页面
+                if (s.toString().trim().length() == 0) {
+                    switch2HistoryAndRecommendView();
+                }
 
             }
 
@@ -249,8 +253,8 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback,
     /**
      * 切换到历史和推荐界面
      */
-    private void switch2HistoryPage() {
-        if (mSearchPresenter != null ) {
+    private void switch2HistoryAndRecommendView() {
+        if (mSearchPresenter != null) {
             mSearchPresenter.getHistories();
         }
         mHistoryContainer.setVisibility(mHistoryView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
@@ -274,6 +278,7 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback,
         } else {
             mHistoryContainer.setVisibility(View.VISIBLE);
             mHistoryView.setTextList(histories);
+            logUtils.d(this, "fragment的历史记录数据" + histories.toString());
         }
     }
 
@@ -363,6 +368,8 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback,
         if (mSearchPresenter != null) {
             mResultList.scrollToPosition(0);
             mSearchInputBox.setText(text);
+            mSearchInputBox.setFocusable(true);
+            mSearchInputBox.setSelection(text.length());
             mSearchPresenter.doSearch(text);
         }
     }
