@@ -1,7 +1,9 @@
 package com.phc.neckrreferential.ui.fragment;
 
 import android.graphics.Rect;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.phc.neckrreferential.modle.domain.SearchResult;
 import com.phc.neckrreferential.presenter.ISearchPagePresenter;
 import com.phc.neckrreferential.ui.adapter.LinearItemContentAdapter;
 import com.phc.neckrreferential.ui.custom.TextFlowLayout;
+import com.phc.neckrreferential.utils.KeyboardUtils;
 import com.phc.neckrreferential.utils.PresenterManager;
 import com.phc.neckrreferential.utils.SizeUtils;
 import com.phc.neckrreferential.utils.TicketUtils;
@@ -35,7 +38,6 @@ import com.phc.neckrreferential.view.ISearchViewCallback;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,7 +49,7 @@ import butterknife.BindView;
  * 创建日期：2020/6/6 10
  * 描述：
  */
-public class SearchFragment extends BaseFragment implements ISearchViewCallback {
+public class SearchFragment extends BaseFragment implements ISearchViewCallback, TextFlowLayout.onFlowTextItemClickListener {
 
 
     /**
@@ -126,26 +128,93 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback 
         mRefreshContainer.setEnableLoadmore(true);
         mRefreshContainer.setEnableRefresh(false);
         mRefreshContainer.setEnableOverScroll(true);
+        //设置结果列表显示的间距
+        mResultList.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view
+                    , @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                //这个参数好像越拉越大
+                outRect.top = SizeUtils.dip2px(getContext(), 2f);
+                outRect.bottom = SizeUtils.dip2px(getContext(), 2f);
+            }
+        });
 
     }
 
+    /**
+     * 判断是否有文字
+     *
+     * @param containSpace 是否需要判断空格，true是不需要，false是需要
+     * @return
+     */
+    private boolean hasInput(boolean containSpace) {
+        if (containSpace) {
+            return mSearchInputBox.getText().toString().length() > 0;
+        } else {
+            return mSearchInputBox.getText().toString().trim().length() > 0;
+        }
+    }
+
+
     @Override
     protected void initListener() {
+        //推荐和历史的点击事件
+        mHistoryView.setOnFlowTextItemClickListener(this);
+        mRecommendView.setOnFlowTextItemClickListener(this);
+//        搜索按钮的搜索发起
+        mSearchBtn.setOnClickListener(v -> {
+            if (hasInput(false)) {
+                if (mSearchPresenter != null) {
+//                    mSearchPresenter.doSearch(mSearchInputBox.getText().toString());
+                    toSearch(mSearchInputBox.getText().toString());
+                    //需要收起键盘
+                    KeyboardUtils.hide(getContext(), v);
+                }
+            }else {
+                KeyboardUtils.hide(getContext(), v);
+            }
+        });
+//        mCleanInputBtn删除输入框内容的事件
+        mCleanInputBtn.setOnClickListener(v -> {
+            //需要按了清除历史，需要清空输入框And显示历史记录和推荐
+            mSearchInputBox.setText("");
+            switch2HistoryPage();
+        });
         //监听输入框的变换，如果有字存在，就显示清空文字的按钮
+        mSearchInputBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                文字变化前
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //文字变化的时候，如果长度不为0，显示删除按钮，
+                mCleanInputBtn.setVisibility(hasInput(true) ? View.VISIBLE : View.GONE);
+                //文字变化的时候，如果有内容，就搜索框右侧按钮修改为搜索
+                mSearchBtn.setText(hasInput(false) ? "搜索" : "取消");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //文字变化后
+            }
+        });
         //editText的搜索事件,是编辑器的事件，这个id是标识符的事件，我设置的是搜索，这里需要拿到搜索标识符IME_ACTION_SEARCH
         mSearchInputBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 //标识符为搜索,进行搜索动作
-                if (actionId == EditorInfo.IME_ACTION_SEARCH && mSearchPresenter != null ) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && mSearchPresenter != null) {
                     //判断拿到的内容是否为null
                     String keyWord = v.getText().toString();
                     if (TextUtils.isEmpty(keyWord)) {
                         return false;
                     }
-                    mSearchPresenter.doSearch(keyWord);
+//                    mSearchPresenter.doSearch(keyWord);
                     logUtils.d(this, "用户输入---》" + keyWord);
+                    toSearch(keyWord);
                 }
                 //返回事件是否结束
                 return false;
@@ -177,9 +246,22 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback 
         });
     }
 
+    /**
+     * 切换到历史和推荐界面
+     */
+    private void switch2HistoryPage() {
+        if (mSearchPresenter != null ) {
+            mSearchPresenter.getHistories();
+        }
+        mHistoryContainer.setVisibility(mHistoryView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
+        mRecommendContainer.setVisibility(mRecommendView.getContentSize() != 0 ? View.VISIBLE : View.GONE);
+        //隐藏内容
+        mRefreshContainer.setVisibility(View.GONE);
+    }
+
     @Override
     protected void onRetryClick() {
-        //重新家长
+        //重新搜索
         mSearchPresenter.reSearch();
     }
 
@@ -187,12 +269,10 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback 
     public void onHistoriesLoaded(@NotNull List<String> histories) {
 //        logUtils.d(this, "onHistoriesLoaded" + histories.toString());
         //判断是否显示,优先执行第一个条件，如果第一个条件没满足就不会进行下一个条件，如果传入的是null就证明没有数据，需要隐藏
-        //因为历史记录是倒过来的，需要反转一下集合
         if (histories == null || histories.size() == 0) {
             mHistoryContainer.setVisibility(View.GONE);
         } else {
             mHistoryContainer.setVisibility(View.VISIBLE);
-            Collections.reverse(histories);
             mHistoryView.setTextList(histories);
         }
     }
@@ -220,16 +300,6 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //设置显示的间距
-        mResultList.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view
-                    , @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top = SizeUtils.dip2px(getContext(), 2f);
-                outRect.bottom = SizeUtils.dip2px(getContext(), 2f);
-            }
-        });
-
     }
 
     @Override
@@ -281,5 +351,19 @@ public class SearchFragment extends BaseFragment implements ISearchViewCallback 
     @Override
     public void onEmpty() {
         setUpState(State.EMPTY);
+    }
+
+    @Override
+    public void onFlowItemClick(String text) {
+        //发起搜索
+        toSearch(text);
+    }
+
+    private void toSearch(String text) {
+        if (mSearchPresenter != null) {
+            mResultList.scrollToPosition(0);
+            mSearchInputBox.setText(text);
+            mSearchPresenter.doSearch(text);
+        }
     }
 }

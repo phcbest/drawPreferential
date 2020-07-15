@@ -12,6 +12,7 @@ import com.phc.neckrreferential.R;
 import com.phc.neckrreferential.utils.logUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,8 +70,21 @@ public class TextFlowLayout extends ViewGroup {
         ta.recycle();
     }
 
+    /**
+     * 拿到内容尺寸
+     */
+    public int getContentSize() {
+        return mTextList.size();
+    }
+
+
     public void setTextList(List<String> textList) {
-        this.mTextList = textList;
+        //因为多次进来会产生多个ui，没有清空集合，所以需要清空集合
+        removeAllViews();//移除历史view
+        this.mTextList.clear();
+        this.mTextList.addAll(textList);
+        //因为历史记录是倒过来的，需要反转一下集合
+        Collections.reverse(mTextList);
         //遍历内容
         for (String text : mTextList) {
             //添加chileView,该方法最后一个尝试为是否绑定当前viewGroup，如果为false需要自己添加进去
@@ -89,6 +103,7 @@ public class TextFlowLayout extends ViewGroup {
 
     //二维集合用于描述全部的
     private List<List<View>> lines = new ArrayList<>();
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -184,7 +199,8 @@ public class TextFlowLayout extends ViewGroup {
     public void setOnFlowTextItemClickListener(onFlowTextItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
     }
-    public interface onFlowTextItemClickListener{
+
+    public interface onFlowTextItemClickListener {
         void onFlowItemClick(String text);
     }
 }
