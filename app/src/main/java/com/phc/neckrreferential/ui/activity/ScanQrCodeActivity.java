@@ -34,6 +34,9 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.phc.neckrreferential.R;
+import com.phc.neckrreferential.modle.domain.IBaseInfo;
+import com.phc.neckrreferential.utils.TicketUtils;
+import com.phc.neckrreferential.utils.ToastUtils;
 import com.vondear.rxfeature.module.scaner.CameraManager;
 import com.vondear.rxfeature.module.scaner.OnRxScanerListener;
 import com.vondear.rxfeature.module.scaner.PlanarYUVLuminanceSource;
@@ -405,10 +408,32 @@ public class ScanQrCodeActivity extends FragmentActivity {
         inactivityTimer.onActivity();
         //扫描成功之后的振动与声音提示
         RxBeepTool.playBeep(this, vibrate);
-
         String result1 = result.getText();
         Log.d("二维码/条形码 扫描结果", result1);
+
         //对扫描结果进行处理         https://s.click.taobao.com/BGZJbyu
+
+        if (result1.contains("s.click.taobao.com")) {
+            TicketUtils.toTicketPage(this, new IBaseInfo() {
+                @Override
+                public String getCover() {
+                    return null;
+                }
+
+                @Override
+                public String getTitle() {
+                    return "";
+                }
+
+                @Override
+                public String getUrl() {
+                    return result1;
+                }
+            });
+            finish();//进行了跳转，直接结束当前activity
+        }else {
+            ToastUtils.showToast("无法识别当前二维码"+result1);
+        }
 
 
 

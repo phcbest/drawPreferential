@@ -109,7 +109,7 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
                 String tickerCode = mTicketCode.getText().toString().trim();
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 //复制到粘贴板
-                ClipData clipData = ClipData.newPlainText("tao_kou_ling",tickerCode);
+                ClipData clipData = ClipData.newPlainText("tao_kou_ling", tickerCode);
                 cm.setPrimaryClip(clipData);
                 //判断有没有淘宝
                 if (mHasTaoBaoApp) {
@@ -123,7 +123,7 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     Toast.makeText(TicketActivity.this, "复制成功，粘贴分享或打开淘宝", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -141,20 +141,30 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
 
     @Override
     public void onTicketLoaded(String cover, TicketResult result) {
-//
+        //对组件进行隐藏和显示操作
+        if (loadingView != null) {
+            loadingView.setVisibility(View.GONE);
+        }
+        if (retryLoadText != null) {
+            retryLoadText.setVisibility(View.GONE);
+        }
+
         if (mCover != null && !TextUtils.isEmpty(cover)) {
             ViewGroup.LayoutParams layoutParams = mCover.getLayoutParams();
             String coverPath = UrlUtils.getCoverPath(cover);
             logUtils.d(this, "领券页面的图片url=====" + coverPath);
             Glide.with(this).load(coverPath).into(mCover);
         }
-        if (result != null && result.getData().getTbk_tpwd_create_response() != null) {
+        if (mCover != null && TextUtils.isEmpty(cover)) {
+            mCover.setImageResource(R.mipmap.no_image);
+        }
+
+        if (result != null && result.getData().getTbk_tpwd_create_response() != null && mTicketCode != null) {
             String mResult = result.getData().getTbk_tpwd_create_response().getData().getModel();
+            logUtils.d(this, "淘口令构建成功" + mResult);
             mTicketCode.setText(mResult);
         }
-        if (loadingView != null) {
-            loadingView.setVisibility(View.GONE);
-        }
+
     }
 
     @Override
@@ -171,10 +181,10 @@ public class TicketActivity extends BaseActivity implements ITicketPagerCallback
     @Override
     public void onLoading() {
         if (loadingView != null) {
-            loadingView.setVisibility(View.GONE);
+            loadingView.setVisibility(View.VISIBLE);
         }
         if (retryLoadText != null) {
-            retryLoadText.setVisibility(View.VISIBLE);
+            retryLoadText.setVisibility(View.GONE);
         }
     }
 

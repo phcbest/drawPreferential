@@ -1,5 +1,6 @@
 package com.phc.neckrreferential.ui.activity;
 
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -14,13 +15,13 @@ import com.phc.neckrreferential.ui.fragment.HomeFragment;
 import com.phc.neckrreferential.ui.fragment.OnSellFragment;
 import com.phc.neckrreferential.ui.fragment.SearchFragment;
 import com.phc.neckrreferential.ui.fragment.SelectedFragment;
+import com.phc.neckrreferential.utils.ToastUtils;
 import com.phc.neckrreferential.utils.logUtils;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements IMainActivity{
+public class MainActivity extends BaseActivity implements IMainActivity {
 
-    
 
     @BindView(R.id.main_navigation_bar)
     public BottomNavigationView mNavigationView;
@@ -53,7 +54,6 @@ public class MainActivity extends BaseActivity implements IMainActivity{
     }
 
 
-
     /**
      * 初始化fragment，将fragment全添加进去
      */
@@ -66,7 +66,34 @@ public class MainActivity extends BaseActivity implements IMainActivity{
         switchFragment(mHomeFragment);
     }
 
+
+    private long exitTime = 0;
+
+    /**
+     * TODO 需要做出返回键的逻辑，点两下返回键才可以退出
+     * 这里的返回是是否放行该事件，如果放行返回true，不然返回false
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
+    private void exit() {
+        //这里面拿到第二下点击后再修改isExit
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            ToastUtils.showToast("再按一次退出程序");
+            exitTime = System.currentTimeMillis();
+        }else {
+            finish();
+        }
+    }
+
     private void initListener() {
+        //导航栏的点击事件
         mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -112,7 +139,7 @@ public class MainActivity extends BaseActivity implements IMainActivity{
             fragmentTransaction.hide(lastOneFragment);
         }
         //将目标fragment保存为最后一个fragment
-        lastOneFragment = targetFragment ;
+        lastOneFragment = targetFragment;
         //直接使用更换的方法会导致重新加载，所以使用添加和隐藏
 //        fragmentTransaction.replace(R.id.main_page_container, targetFragment);
         fragmentTransaction.commit();
