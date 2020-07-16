@@ -70,7 +70,6 @@ public class MainActivity extends BaseActivity implements IMainActivity {
     private long exitTime = 0;
 
     /**
-     * TODO 需要做出返回键的逻辑，点两下返回键才可以退出
      * 这里的返回是是否放行该事件，如果放行返回true，不然返回false
      */
     @Override
@@ -84,6 +83,7 @@ public class MainActivity extends BaseActivity implements IMainActivity {
 
     private void exit() {
         //这里面拿到第二下点击后再修改isExit
+        //原理是这样的，先进行判断，两次系统时间差是否大于2秒
         if (System.currentTimeMillis() - exitTime > 2000) {
             ToastUtils.showToast("再按一次退出程序");
             exitTime = System.currentTimeMillis();
